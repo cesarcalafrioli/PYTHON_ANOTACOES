@@ -7,7 +7,6 @@ import csv
 path_json = './data_raw/dados_empresaA.json'
 
 with open(path_json, 'r') as file:
-    #print ( file.readline() ) -> Só vai imprimir a primeira linha
     dados_json = json.load(file)
 
 print(type(dados_json))
@@ -100,14 +99,56 @@ combined_list.extend(new_dados_csv)
 
 print(len(combined_list))
 
+#nomes_colunas = list(combined_list[0].keys())
+
+"""
+get() -> método incorporado aos dicionários em Python para procurar um valor com base em uma chave específica,
+sem o risco de gerar um erro se a chave não for encontrada.
+
+Sintaxe( chave, valor_padrao_se_nao_for_encontrado )
+"""
+print("Data da venda: {}".format(combined_list[0].get('Data da Venda', 'Indisponível')))
+
+nomes_colunas = list(combined_list[-1].keys()) # É possível utilizar o append na lista, mas do jeito que está podemos tomar algumas decisões e deixar o código mais dinâmico.
+print(nomes_colunas)
+
+"""Lista de dados combinados."""
+dados_combinados_tabela = [nomes_colunas]
+
+for row in combined_list:
+    linha = []
+    for coluna in nomes_colunas:
+        linha.append(row.get(coluna, 'Indisponível'))
+    dados_combinados_tabela.append(linha)
+
+print(dados_combinados_tabela[0])
+print(dados_combinados_tabela[1])
+print(dados_combinados_tabela[-1])
+
 #### SALVANDO OS DADOS #####
 path_dados_combinados = './data_processed/dados_combinados.csv'
 
-nomes_colunas = list(combined_list[0].keys())
-
 with open(path_dados_combinados, 'w') as file:
-    writer = csv.DictWriter(file, fieldnames=nomes_colunas)
-    writer.writeheader()
+    writer = csv.writer(file)
+    writer.writerows(dados_combinados_tabela)
 
-    for row in combined_list:
-        writer.writerow(row)
+"""
+Utilizar e conhecer bibliotecas é um processo muito importante para uma pessoa engenheira de dados, porque existem muitas bibliotecas que vão abstrair processos para nós.
+
+Sabemos como funciona a escrita de um CSV, poderíamos até ir mais a fundo no Python e sair da biblioteca CSV para escrever manualmente dentro de um arquivo, mas isso geraria muito código,
+que não é o objetivo do nosso projeto. Quem visse nosso código, encontraria uma grande quantidade de informação que não faz sentido para o projeto, no qual só queremos salvar os dados.
+
+Poderíamos implementar algo que não fosse tão eficiente quanto a pessoa que desenvolveu a biblioteca. Portanto, há muitos pontos de vantagem em usar a biblioteca e o Python foi construído
+em cima disso. Temos bibliotecas para fazer tudo o que nós podemos imaginar. Por que mostrar esse processo mais manual? Porque é muito importante entender como funciona. A implementação que
+foi feita no CSV pode ser mais eficiente do que a nossa. Mas, para o quadro geral, nós podemos encontrar situações específicas que demandarão uma maneira diferente de salvar os dados em CSV,
+por exemplo.
+
+Ao longo desse projeto, vimos que nossos dados eram poucos e a memória RAM dava conta no processamento dentro do Jupyter Notebook. Mas e se tivéssemos muitos dados? A maneira de lidar e ler
+esses dados seria diferente. Talvez precisássemos de outras bibliotecas.
+
+Para nós entendermos que precisamos mudar de uma biblioteca para outra, nós precisamos entender como as coisas funcionam. Por isso, às vezes, fazemos um processo mais verboso, ou seja, com
+mais código. Isso serve para nos ajudar a entender e solidificar esse fundamento, que é justamente a proposta desse projeto.
+
+Estamos animados para ver se vamos conseguir salvar os dados dessa vez. Então, vamos rodar esse código. Ele não gerou nenhum erro e podemos abrir nosso CSV e entender se ele está do jeito que
+esperávamos. Na lateral esquerda, acessaremos o explorador. Dentro da pasta "data_processed", acessaremos o arquivo dados_combinados.csv. Podemos fechar o explorador e analisar esse CSV.
+"""
