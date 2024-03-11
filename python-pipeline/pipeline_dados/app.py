@@ -1,6 +1,9 @@
 import json
 import csv
 
+#### PIPELINE EM BATCH
+
+
 #### EXTRAÇÃO DOS DADOS ####
 
 # Leitura dos dados em json
