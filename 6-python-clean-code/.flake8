@@ -1,0 +1,4 @@
+[flake8]
+extend-ignore = F401,W292
+exclude = sample2.py
+per-file-ignores = sample.py:E302
